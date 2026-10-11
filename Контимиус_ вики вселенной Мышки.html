@@ -1,0 +1,962 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Вики вымышленной гигаструктуры Контимиус (она же Мышка): отделы, элементы, персонал и генератор вселенных.">
+<title>Контимиус — вики гигаструктуры</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wdth,wght@8..144,25..151,100..1000&display=swap">
+<style>
+@property --h { syntax: '<number>'; inherits: true; initial-value: 300; }
+
+:root {
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  --h: 300; --c: 0.14;
+  transition: --h .9s ease;
+
+  --primary: oklch(0.48 calc(var(--c) * 1.5) var(--h));
+  --on-primary: oklch(0.99 0.01 var(--h));
+  --primary-container: oklch(0.91 calc(var(--c) * 0.8) var(--h));
+  --on-primary-container: oklch(0.27 calc(var(--c) * 1.1) var(--h));
+  --secondary: oklch(0.5 calc(var(--c) * 0.45) var(--h));
+  --secondary-container: oklch(0.92 calc(var(--c) * 0.35) var(--h));
+  --on-secondary-container: oklch(0.3 calc(var(--c) * 0.5) var(--h));
+  --tertiary: oklch(0.5 calc(var(--c) * 1.2) calc(var(--h) + 60));
+  --on-tertiary: oklch(0.99 0.01 calc(var(--h) + 60));
+  --tertiary-container: oklch(0.91 calc(var(--c) * 0.85) calc(var(--h) + 60));
+  --on-tertiary-container: oklch(0.29 calc(var(--c) * 1) calc(var(--h) + 60));
+  --surface: oklch(0.985 0.006 var(--h));
+  --surface-lowest: oklch(0.998 0.003 var(--h));
+  --surface-low: oklch(0.968 0.01 var(--h));
+  --surface-container: oklch(0.953 0.013 var(--h));
+  --surface-high: oklch(0.937 0.016 var(--h));
+  --surface-highest: oklch(0.92 0.018 var(--h));
+  --on-surface: oklch(0.2 0.02 var(--h));
+  --on-surface-variant: oklch(0.42 0.025 var(--h));
+  --outline: oklch(0.6 0.025 var(--h));
+  --outline-variant: oklch(0.85 0.02 var(--h));
+
+  --spring: cubic-bezier(.34, 1.45, .64, 1);
+  --emph: cubic-bezier(.2, 0, 0, 1);
+}
+@supports (transition-timing-function: linear(0, 1)) {
+  :root { --spring: linear(0, 0.009, 0.035 2.1%, 0.141 4.4%, 0.723 12.9%, 0.938 16.7%, 1.017 19.4%, 1.067 22%, 1.099 24.3%, 1.108 25.8%, 1.105 27.4%, 1.054 32.4%, 1.015 37.1%, 0.991 41.7%, 0.987 45.8%, 1.002 59%, 1.001 75%, 1); }
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --primary: oklch(0.8 calc(var(--c) * 1.1) var(--h));
+    --on-primary: oklch(0.28 calc(var(--c) * 1.1) var(--h));
+    --primary-container: oklch(0.38 calc(var(--c) * 1.2) var(--h));
+    --on-primary-container: oklch(0.92 calc(var(--c) * 0.6) var(--h));
+    --secondary: oklch(0.8 calc(var(--c) * 0.4) var(--h));
+    --secondary-container: oklch(0.36 calc(var(--c) * 0.45) var(--h));
+    --on-secondary-container: oklch(0.92 calc(var(--c) * 0.3) var(--h));
+    --tertiary: oklch(0.8 calc(var(--c) * 1) calc(var(--h) + 60));
+    --on-tertiary: oklch(0.27 0.08 calc(var(--h) + 60));
+    --tertiary-container: oklch(0.38 calc(var(--c) * 1) calc(var(--h) + 60));
+    --on-tertiary-container: oklch(0.92 calc(var(--c) * 0.5) calc(var(--h) + 60));
+    --surface: oklch(0.19 0.014 var(--h));
+    --surface-lowest: oklch(0.16 0.014 var(--h));
+    --surface-low: oklch(0.22 0.016 var(--h));
+    --surface-container: oklch(0.245 0.018 var(--h));
+    --surface-high: oklch(0.275 0.02 var(--h));
+    --surface-highest: oklch(0.305 0.022 var(--h));
+    --on-surface: oklch(0.92 0.01 var(--h));
+    --on-surface-variant: oklch(0.78 0.02 var(--h));
+    --outline: oklch(0.6 0.02 var(--h));
+    --outline-variant: oklch(0.38 0.02 var(--h));
+  }
+}
+:root[data-theme="dark"] {
+  --primary: oklch(0.8 calc(var(--c) * 1.1) var(--h));
+  --on-primary: oklch(0.28 calc(var(--c) * 1.1) var(--h));
+  --primary-container: oklch(0.38 calc(var(--c) * 1.2) var(--h));
+  --on-primary-container: oklch(0.92 calc(var(--c) * 0.6) var(--h));
+  --secondary: oklch(0.8 calc(var(--c) * 0.4) var(--h));
+  --secondary-container: oklch(0.36 calc(var(--c) * 0.45) var(--h));
+  --on-secondary-container: oklch(0.92 calc(var(--c) * 0.3) var(--h));
+  --tertiary: oklch(0.8 calc(var(--c) * 1) calc(var(--h) + 60));
+  --on-tertiary: oklch(0.27 0.08 calc(var(--h) + 60));
+  --tertiary-container: oklch(0.38 calc(var(--c) * 1) calc(var(--h) + 60));
+  --on-tertiary-container: oklch(0.92 calc(var(--c) * 0.5) calc(var(--h) + 60));
+  --surface: oklch(0.19 0.014 var(--h));
+  --surface-lowest: oklch(0.16 0.014 var(--h));
+  --surface-low: oklch(0.22 0.016 var(--h));
+  --surface-container: oklch(0.245 0.018 var(--h));
+  --surface-high: oklch(0.275 0.02 var(--h));
+  --surface-highest: oklch(0.305 0.022 var(--h));
+  --on-surface: oklch(0.92 0.01 var(--h));
+  --on-surface-variant: oklch(0.78 0.02 var(--h));
+  --outline: oklch(0.6 0.02 var(--h));
+  --outline-variant: oklch(0.38 0.02 var(--h));
+}
+:root.nt { transition: none; }
+html { scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 72px); scroll-behavior: smooth; height: 100%; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0; min-height: 100%;
+  background: var(--surface); color: var(--on-surface);
+  font-family: 'Roboto Flex', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-variation-settings: 'wdth' 100;
+  line-height: 1.5; -webkit-font-smoothing: antialiased;
+  transition: background .6s ease, color .6s ease;
+}
+h1, h2, h3, p { margin: 0; }
+button { font: inherit; color: inherit; cursor: pointer; border: 0; background: none; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--primary); outline-offset: 3px; }
+.ic { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.skip { position: absolute; left: -999px; top: 8px; z-index: 100; background: var(--primary); color: var(--on-primary); padding: 12px 20px; border-radius: 16px; }
+.skip:focus { left: 16px; }
+
+/* ---------- type ---------- */
+.display { font-size: clamp(2.4rem, 6.4vw, 4.75rem); line-height: 1.02; letter-spacing: -.01em; font-variation-settings: 'wdth' 120, 'wght' 820, 'opsz' 96; }
+.title { font-size: 1.5rem; line-height: 1.2; font-variation-settings: 'wdth' 108, 'wght' 700, 'opsz' 24; }
+.lead { font-size: clamp(1.05rem, 1.6vw, 1.25rem); line-height: 1.6; color: var(--on-surface-variant); max-width: 58ch; }
+.body { color: var(--on-surface-variant); max-width: 60ch; }
+.small { font-size: .875rem; }
+
+/* ---------- layout ---------- */
+.shell { margin-left: 96px; }
+.wrap { max-width: 1200px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 48px); }
+section { padding-block: clamp(56px, 9vw, 112px); }
+.sec-head { display: grid; gap: 16px; margin-bottom: clamp(28px, 4vw, 48px); }
+
+/* ---------- buttons ---------- */
+.btn, .ib, .chip, .fab, .fab-item { position: relative; overflow: hidden; -webkit-tap-highlight-color: transparent; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 56px; padding: 0 28px; border-radius: 28px; text-decoration: none;
+  font-size: 1rem; font-variation-settings: 'wdth' 100, 'wght' 650;
+  background: var(--primary); color: var(--on-primary);
+  transition: border-radius .55s var(--spring), transform .55s var(--spring), background .3s, color .3s;
+}
+.btn.tonal { background: var(--secondary-container); color: var(--on-secondary-container); }
+.btn.outlined { background: transparent; color: var(--primary); box-shadow: inset 0 0 0 2px var(--outline); }
+.btn.sm { min-height: 40px; padding: 0 20px; border-radius: 20px; font-size: .9rem; }
+.btn::before, .ib::before, .chip::before, .fab::before, .fab-item::before { content: ''; position: absolute; inset: 0; background: currentColor; opacity: 0; transition: opacity .2s; pointer-events: none; }
+.btn:hover::before, .ib:hover::before, .chip:hover::before, .fab:hover::before, .fab-item:hover::before { opacity: .08; }
+.btn:active, .ib:active, .fab:active { border-radius: 14px; transform: scale(.96); }
+.btn:disabled { opacity: .5; cursor: progress; }
+.ripple { position: absolute; border-radius: 50%; background: currentColor; opacity: .18; transform: scale(0); animation: rip .7s ease-out forwards; pointer-events: none; }
+@keyframes rip { to { transform: scale(1); opacity: 0; } }
+
+.ib { width: 48px; height: 48px; border-radius: 24px; display: grid; place-items: center; color: var(--on-surface-variant); background: var(--surface-highest); transition: border-radius .55s var(--spring), background .3s, color .3s, transform .55s var(--spring); }
+.ib[aria-pressed="true"], .ib[aria-expanded="true"] { background: var(--primary); color: var(--on-primary); border-radius: 15px; }
+.ib[aria-pressed="true"] .ic { fill: currentColor; }
+#btnMode .moon { display: none; }
+#btnMode[aria-pressed="true"] .sun { display: none; }
+#btnMode[aria-pressed="true"] .moon { display: block; }
+#btnMode[aria-pressed="true"] .ic { fill: none; }
+
+.bgroup { display: inline-flex; gap: 2px; }
+.bgroup .btn { border-radius: 10px; min-height: 48px; padding: 0 22px; background: var(--secondary-container); color: var(--on-secondary-container); }
+.bgroup .btn:first-child { border-radius: 24px 10px 10px 24px; }
+.bgroup .btn:last-child { border-radius: 10px 24px 24px 10px; }
+.bgroup .btn[aria-pressed="true"] { background: var(--primary); color: var(--on-primary); border-radius: 24px; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 16px; border-radius: 12px; font-size: .9rem; font-variation-settings: 'wght' 560; box-shadow: inset 0 0 0 1.5px var(--outline-variant); color: var(--on-surface-variant); transition: border-radius .5s var(--spring), background .3s, color .3s; }
+.chip .ic { width: 18px; height: 18px; display: none; }
+.chip[aria-pressed="true"] { background: var(--secondary-container); color: var(--on-secondary-container); box-shadow: none; border-radius: 20px; }
+.chip[aria-pressed="true"] .ic { display: block; }
+.tag { display: inline-flex; align-items: center; min-height: 28px; padding: 0 12px; border-radius: 10px; font-size: .8rem; font-variation-settings: 'wght' 600; background: var(--tertiary-container); color: var(--on-tertiary-container); }
+
+/* ---------- app bar ---------- */
+.appbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 30; height: 72px; display: flex; align-items: center; justify-content: space-between; padding: 0 clamp(16px, 3vw, 32px); background: color-mix(in oklab, var(--surface) 82%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+.appbar-title { font-size: 1.375rem; font-variation-settings: 'wdth' 125, 'wght' 800, 'opsz' 24; opacity: 0; transform: translateY(8px); transition: opacity .4s, transform .6s var(--spring); }
+.appbar.scrolled .appbar-title { opacity: 1; transform: none; }
+.appbar .actions { display: flex; gap: 8px; margin-left: auto; }
+
+.menu { position: fixed; z-index: 40; top: calc(env(safe-area-inset-top, 0px) + 72px); right: 16px; width: min(380px, calc(100vw - 32px)); background: var(--surface-high); border-radius: 32px; padding: 24px; display: grid; gap: 20px; box-shadow: 0 18px 48px oklch(0 0 0 / .22); visibility: hidden; opacity: 0; transform: scale(.88) translateY(-12px); transform-origin: top right; transition: transform .55s var(--spring), opacity .25s, visibility .25s; }
+.menu.open { visibility: visible; opacity: 1; transform: none; }
+.swatches { display: flex; flex-wrap: wrap; gap: 12px; }
+.sw { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; color: oklch(0.99 0 0); transition: border-radius .55s var(--spring), transform .55s var(--spring); }
+.sw .ic { opacity: 0; transform: scale(.4); transition: opacity .2s, transform .5s var(--spring); }
+.sw[aria-pressed="true"] { border-radius: 16px; }
+.sw[aria-pressed="true"] .ic { opacity: 1; transform: none; }
+.sw:hover { transform: scale(1.08); }
+.field-label { font-size: .875rem; color: var(--on-surface-variant); margin-bottom: 4px; display: block; font-variation-settings: 'wght' 560; }
+
+.slider { position: relative; }
+.slider input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 44px; background: transparent; margin: 0; cursor: pointer; --val: 50%; }
+.slider input[type=range]::-webkit-slider-runnable-track { height: 16px; border-radius: 8px; background: linear-gradient(to right, var(--primary) var(--val), var(--secondary-container) var(--val)); }
+.slider input[type=range]::-moz-range-track { height: 16px; border-radius: 8px; background: var(--secondary-container); }
+.slider input[type=range]::-moz-range-progress { height: 16px; border-radius: 8px; background: var(--primary); }
+.slider input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 6px; height: 44px; border-radius: 3px; background: var(--primary); margin-top: -14px; border: 0; transition: width .3s var(--spring); }
+.slider input[type=range]::-moz-range-thumb { width: 6px; height: 44px; border-radius: 3px; background: var(--primary); border: 0; }
+.slider input[type=range]:active::-webkit-slider-thumb { width: 4px; }
+.slider.hue input[type=range]::-webkit-slider-runnable-track { background: linear-gradient(to right, hsl(0 80% 60%), hsl(60 80% 55%), hsl(120 70% 50%), hsl(180 75% 50%), hsl(240 80% 65%), hsl(300 75% 60%), hsl(360 80% 60%)); }
+.slider.hue input[type=range]::-moz-range-track { background: linear-gradient(to right, hsl(0 80% 60%), hsl(60 80% 55%), hsl(120 70% 50%), hsl(180 75% 50%), hsl(240 80% 65%), hsl(300 75% 60%), hsl(360 80% 60%)); }
+.slider.hue input[type=range]::-moz-range-progress { background: transparent; }
+
+.switch-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.switch { width: 56px; height: 34px; border-radius: 17px; background: var(--surface-highest); box-shadow: inset 0 0 0 2px var(--outline); position: relative; flex: none; transition: background .3s, box-shadow .3s; }
+.switch .thumb { position: absolute; top: 50%; left: 8px; width: 16px; height: 16px; border-radius: 50%; background: var(--outline); transform: translateY(-50%); display: grid; place-items: center; transition: left .5s var(--spring), width .5s var(--spring), height .5s var(--spring), background .3s; color: var(--on-primary); }
+.switch .thumb .ic { width: 16px; height: 16px; opacity: 0; transition: opacity .2s; stroke-width: 3; }
+.switch[aria-checked="true"] { background: var(--primary); box-shadow: none; }
+.switch[aria-checked="true"] .thumb { left: 26px; width: 26px; height: 26px; background: var(--on-primary); color: var(--primary); }
+.switch[aria-checked="true"] .thumb .ic { opacity: 1; }
+
+/* ---------- navigation rail / bar ---------- */
+.nav { position: fixed; z-index: 25; left: 0; top: 0; bottom: 0; width: 96px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: calc(env(safe-area-inset-top, 0px) + 12px) 0 calc(env(safe-area-inset-bottom, 0px) + 12px); background: var(--surface); }
+.nav-item { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 84px; text-decoration: none; color: var(--on-surface-variant); font-size: .75rem; font-variation-settings: 'wght' 600; }
+.nav-item .pill { width: 56px; height: 32px; border-radius: 16px; display: grid; place-items: center; transition: width .55s var(--spring), background .3s, color .3s; }
+.nav-item:hover .pill { background: var(--surface-highest); }
+.nav-item[aria-current="true"] { color: var(--on-surface); }
+.nav-item[aria-current="true"] .pill { width: 68px; background: var(--secondary-container); color: var(--on-secondary-container); }
+
+/* ---------- FAB menu ---------- */
+.fabwrap { position: fixed; z-index: 35; right: clamp(16px, 3vw, 32px); bottom: calc(env(safe-area-inset-bottom, 0px) + 24px); display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
+.fab { width: 64px; height: 64px; border-radius: 20px; display: grid; place-items: center; background: var(--tertiary-container); color: var(--on-tertiary-container); transition: border-radius .55s var(--spring), background .3s, transform .55s var(--spring); box-shadow: 0 8px 24px oklch(0 0 0 / .2); }
+.fab[aria-expanded="true"] { background: var(--primary); color: var(--on-primary); border-radius: 32px; }
+.fab .ic { transition: transform .6s var(--spring); }
+.fab[aria-expanded="true"] .ic { transform: rotate(135deg); }
+.fab-items { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; pointer-events: none; }
+.fab-item { display: inline-flex; align-items: center; gap: 12px; min-height: 52px; padding: 0 22px 0 18px; border-radius: 26px; background: var(--primary-container); color: var(--on-primary-container); font-variation-settings: 'wght' 620; opacity: 0; transform: translateY(24px) scale(.7); transform-origin: bottom right; transition: transform .55s var(--spring), opacity .2s; transition-delay: calc(var(--i) * 40ms); box-shadow: 0 6px 16px oklch(0 0 0 / .16); }
+.fabwrap.open .fab-items { pointer-events: auto; }
+.fabwrap.open .fab-item { opacity: 1; transform: none; }
+
+.snackbar { position: fixed; z-index: 60; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 104px); transform: translate(-50%, 40px) scale(.9); opacity: 0; background: var(--on-surface); color: var(--surface); padding: 14px 24px; border-radius: 16px; max-width: min(90vw, 420px); font-size: .95rem; transition: transform .55s var(--spring), opacity .25s; pointer-events: none; }
+.snackbar.show { transform: translate(-50%, 0); opacity: 1; }
+
+/* ---------- hero ---------- */
+.hero { padding-top: clamp(24px, 5vw, 56px); }
+.hero-grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: clamp(24px, 4vw, 56px); align-items: center; }
+.hero-title { font-size: min(11.5vw, 8.6rem); line-height: .92; letter-spacing: -.02em; margin: 24px 0 24px; font-variation-settings: 'wdth' var(--wd, 128), 'wght' var(--wg, 860), 'opsz' 144; transition: font-variation-settings .45s ease-out; overflow-wrap: anywhere; color: var(--primary); }
+.hero-title.alt { --wd: 151; --wg: 900; }
+.hero .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+.hero-art { position: relative; aspect-ratio: 1; width: 100%; max-width: 560px; margin-inline: auto; }
+.hero-art svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.hero-art .chips { position: absolute; left: 0; bottom: -8px; }
+.spin { transform-box: fill-box; transform-origin: center; animation: spin 80s linear infinite; }
+.spin.rev { animation-duration: 55s; animation-direction: reverse; }
+.spin.fast { animation-duration: 28s; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.hero [data-in] { animation: rise .9s var(--spring) both; animation-delay: calc(var(--i, 0) * 90ms); }
+@keyframes rise { from { opacity: 0; transform: translateY(36px) scale(.96); } }
+
+/* ---------- cards / bento ---------- */
+.bento { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; }
+.card { background: var(--surface-high); border-radius: 36px; padding: clamp(22px, 3vw, 32px); position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 14px; transition: border-radius .7s var(--spring), background .4s; }
+.span7 { grid-column: span 7; } .span5 { grid-column: span 5; }
+.shape-a { border-radius: 72px 24px 72px 24px; } .shape-a:hover { border-radius: 24px 72px 24px 72px; }
+.shape-b { border-radius: 24px 72px 24px 72px; } .shape-b:hover { border-radius: 72px 24px 72px 24px; }
+.shape-c { border-radius: 40px; } .shape-c:hover { border-radius: 64px 28px 64px 28px; }
+.t-primary { background: var(--primary-container); color: var(--on-primary-container); }
+.t-primary .body { color: inherit; opacity: .86; }
+.t-tertiary { background: var(--tertiary-container); color: var(--on-tertiary-container); }
+.t-tertiary .body { color: inherit; opacity: .86; }
+.t-secondary { background: var(--secondary-container); color: var(--on-secondary-container); }
+.t-secondary .body { color: inherit; opacity: .86; }
+.card-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.mi { position: relative; width: 72px; height: 72px; flex: none; display: grid; place-items: center; }
+.mi > svg:first-child { position: absolute; inset: 0; width: 100%; height: 100%; }
+.mi .ic { position: relative; width: 30px; height: 30px; }
+.more { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .55s var(--emph); }
+.more > div { overflow: hidden; }
+.more p { padding-top: 6px; }
+.open .more { grid-template-rows: 1fr; }
+.exp { align-self: flex-start; margin-top: auto; }
+.exp .ic { transition: transform .6s var(--spring); }
+.open .exp .ic { transform: rotate(180deg); }
+.vault-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.maid-strip { display: flex; margin-top: 4px; }
+.maid-strip svg { width: 84px; height: 92px; margin-right: -14px; }
+
+/* ---------- stepper ---------- */
+.stepper { display: grid; grid-template-columns: 1fr 72px 1fr 72px 1fr; align-items: start; margin-top: clamp(48px, 7vw, 88px); }
+.step { display: grid; gap: 14px; justify-items: start; }
+.step .mi { width: 96px; height: 96px; }
+.step .mi .num { position: relative; font-size: 2.2rem; font-variation-settings: 'wdth' 130, 'wght' 900; color: var(--on-primary-container); }
+.wv { height: 20px; width: 100%; margin-top: 38px; }
+.wv svg { width: 100%; height: 20px; display: block; }
+.wtrack { stroke: var(--outline-variant); stroke-width: 4; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.wwave { fill: none; stroke: var(--primary); stroke-width: 4; stroke-linecap: round; vector-effect: non-scaling-stroke; animation: wv 1.1s linear infinite; }
+.wave-t .wwave { stroke: var(--tertiary); }
+@keyframes wv { to { transform: translateX(40px); } }
+
+/* ---------- elements ---------- */
+.el-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.el-card { gap: 18px; }
+.el-id { display: flex; align-items: center; gap: 18px; }
+.el-id .mi { width: 96px; height: 96px; }
+.el-id .sym { position: relative; font-size: 1.9rem; font-variation-settings: 'wdth' 125, 'wght' 850; }
+.el-no { font-size: .9rem; color: var(--on-surface-variant); }
+.props { display: grid; gap: 10px; margin: 0; }
+.props div { display: grid; gap: 2px; }
+.props dt { font-size: .8rem; color: var(--on-surface-variant); }
+.props dd { margin: 0; font-variation-settings: 'wght' 560; }
+.gauge { display: flex; align-items: baseline; justify-content: space-between; }
+.gauge b { font-size: 1.6rem; font-variation-settings: 'wdth' 120, 'wght' 800; }
+
+/* ---------- staff ---------- */
+.toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 24px; }
+.shift { display: inline-flex; align-items: center; gap: 10px; padding: 8px 18px; border-radius: 20px; background: var(--tertiary-container); color: var(--on-tertiary-container); font-variation-settings: 'wght' 620; }
+.shift b { font-size: 1.2rem; }
+.maid-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+.maid { padding: 22px; background: var(--surface-container); gap: 12px; }
+.maid[hidden] { display: none; }
+.av { position: relative; aspect-ratio: 1; width: 100%; max-width: 230px; margin-inline: auto; }
+.av svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.maid .card-top .title { font-size: 1.35rem; }
+.maid.on { background: var(--primary-container); color: var(--on-primary-container); }
+.maid.on .body { color: inherit; }
+
+/* ---------- forge ---------- */
+.forge { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 16px; }
+.forge-ctl { gap: 22px; justify-content: space-between; }
+.loader { width: 72px; height: 72px; display: none; }
+.loader svg { width: 100%; height: 100%; animation: spin 2.4s linear infinite; }
+.running .loader { display: block; }
+.status { min-height: 1.6em; font-variation-settings: 'wght' 600; }
+.out { gap: 18px; min-height: 100%; }
+.out-empty { display: grid; gap: 10px; align-content: center; justify-items: start; flex: 1; }
+.uni-name { font-size: clamp(1.8rem, 4vw, 2.8rem); line-height: 1.05; font-variation-settings: 'wdth' 125, 'wght' 850, 'opsz' 72; color: var(--primary); }
+.mix { display: grid; gap: 14px; }
+.mix-row { display: grid; gap: 4px; }
+.mix-row .lab { display: flex; justify-content: space-between; font-variation-settings: 'wght' 580; font-size: .95rem; }
+.hist { display: flex; flex-wrap: wrap; gap: 8px; }
+
+footer { padding: 40px 0 140px; color: var(--on-surface-variant); }
+footer .card { background: var(--surface-container); }
+
+/* ---------- responsive ---------- */
+@media (max-width: 1020px) {
+  .el-grid { grid-template-columns: 1fr; }
+  .forge { grid-template-columns: 1fr; }
+}
+@media (max-width: 839px) {
+  .shell { margin-left: 0; padding-bottom: 96px; }
+  .nav { top: auto; right: 0; width: auto; height: auto; flex-direction: row; justify-content: space-around; gap: 0; padding: 10px 6px calc(env(safe-area-inset-bottom, 0px) + 10px); background: var(--surface-container); }
+  .nav-item { width: 68px; }
+  .fabwrap { bottom: calc(env(safe-area-inset-bottom, 0px) + 100px); }
+  .snackbar { bottom: calc(env(safe-area-inset-bottom, 0px) + 190px); }
+  .hero-grid { grid-template-columns: 1fr; }
+  .span7, .span5 { grid-column: span 12; }
+  .stepper { grid-template-columns: 1fr; gap: 28px; }
+  .stepper .wv { display: none; }
+  .hero-art .chips { position: static; margin-top: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
+html.calm *, html.calm *::before, html.calm *::after { animation: none !important; transition-duration: .01ms !important; }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11.5L12 4l9 7.5M5.5 10v9.5h13V10M10 19.5v-5h4v5"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5 9-5zM3 12.5l9 5 9-5M3 16.5l9 5 9-5"/></symbol>
+    <symbol id="i-flask" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6L4.5 18.5A2 2 0 006.2 21.5h11.6a2 2 0 001.7-3L14 9V3M7.5 15h9"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><path d="M9 11a3.5 3.5 0 100-7 3.5 3.5 0 000 7zM2.5 20c0-3.5 2.9-6 6.5-6s6.5 2.5 6.5 6M16 4.5a3.5 3.5 0 010 6.5M18 14.3c2 .8 3.5 2.7 3.5 5.7"/></symbol>
+    <symbol id="i-rocket" viewBox="0 0 24 24"><path d="M12 2c3.5 2.5 5 6 4.5 10l-2 2h-5l-2-2C7 8 8.5 4.5 12 2zM9 14l-3 1-1 4 4-1M15 14l3 1 1 4-4-1M12 8.5h.01M10 18l-1 3M14 18l1 3"/></symbol>
+    <symbol id="i-palette" viewBox="0 0 24 24"><path d="M12 3a9 9 0 100 18c1.2 0 2-.8 2-1.8 0-.5-.2-.9-.5-1.3-.3-.4-.5-.8-.5-1.3 0-1 .8-1.8 1.8-1.8H17a4 4 0 004-4c0-4.4-4-8-9-8zM7.5 11.5h.01M10 7.5h.01M15 7.5h.01"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><path d="M12 16a4 4 0 100-8 4 4 0 000 8zM12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 019.5 4a8 8 0 1010.5 10.5z"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 017-2.6A4 4 0 0119 10c0 5.6-7 10-7 10z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></symbol>
+    <symbol id="i-hammer" viewBox="0 0 24 24"><path d="M13.5 3.5l7 7-3 3-7-7zM12 9l-8.5 8.5a1.8 1.8 0 002.5 2.5L14.5 11.5M7 4.5l3 3"/></symbol>
+    <symbol id="i-vault" viewBox="0 0 24 24"><path d="M3.5 5h17v14h-17zM12 15a3 3 0 100-6 3 3 0 000 6zM12 5v4M12 15v4M3.5 12h5M15.5 12h5"/></symbol>
+    <symbol id="i-building" viewBox="0 0 24 24"><path d="M4 21V4h10v17M14 9h6v12M7.5 8h3M7.5 12h3M7.5 16h3M3 21h18"/></symbol>
+    <symbol id="i-sprout" viewBox="0 0 24 24"><path d="M12 21v-9M12 12c0-4 3-6 7-6 0 4-3 6-7 6zM12 15c0-3-2-5-6-5 0 3 2 5 6 5z"/></symbol>
+    <symbol id="i-egg" viewBox="0 0 24 24"><path d="M12 3c3.5 0 6 5 6 9.5a6 6 0 01-12 0C6 8 8.5 3 12 3zM9.5 13a2.5 2.5 0 002.5 2.5"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+    <symbol id="i-shuffle" viewBox="0 0 24 24"><path d="M3 7h3.5c4 0 5 10 9 10H21M18 14l3 3-3 3M3 17h3.5c1.4 0 2.4-1.3 3.3-3M21 7h-5.5c-1.6 0-2.6 1.4-3.5 3M18 4l3 3-3 3"/></symbol>
+  </defs>
+</svg>
+
+<a class="skip" href="#main">К содержимому</a>
+
+<nav class="nav" aria-label="Разделы">
+  <a class="nav-item" href="#home" data-sec="home"><span class="pill"><svg class="ic"><use href="#i-home"/></svg></span>Главная</a>
+  <a class="nav-item" href="#structure" data-sec="structure"><span class="pill"><svg class="ic"><use href="#i-layers"/></svg></span>Борт</a>
+  <a class="nav-item" href="#elements" data-sec="elements"><span class="pill"><svg class="ic"><use href="#i-flask"/></svg></span>Элементы</a>
+  <a class="nav-item" href="#staff" data-sec="staff"><span class="pill"><svg class="ic"><use href="#i-users"/></svg></span>Персонал</a>
+  <a class="nav-item" href="#forge" data-sec="forge"><span class="pill"><svg class="ic"><use href="#i-rocket"/></svg></span>Ярослав</a>
+</nav>
+
+<div class="shell">
+<header class="appbar" id="appbar">
+  <span class="appbar-title">Контимиус</span>
+  <div class="actions">
+    <button class="ib" id="btnPalette" aria-label="Цвет и оформление" aria-expanded="false" aria-controls="menu"><svg class="ic"><use href="#i-palette"/></svg></button>
+    <button class="ib" id="btnMode" aria-label="Тёмная тема" aria-pressed="false"><svg class="ic sun"><use href="#i-sun"/></svg><svg class="ic moon"><use href="#i-moon"/></svg></button>
+  </div>
+</header>
+
+<div class="menu" id="menu" role="dialog" aria-label="Цвет и оформление">
+  <div>
+    <span class="field-label">Цвет темы</span>
+    <div class="swatches" id="swatches"></div>
+  </div>
+  <div class="slider hue">
+    <label class="field-label" for="hueRange">Оттенок вручную</label>
+    <input type="range" id="hueRange" min="0" max="360" step="1" value="300">
+  </div>
+  <div class="switch-row">
+    <span id="swLabel">Пружинные анимации</span>
+    <button class="switch" id="swMotion" role="switch" aria-checked="true" aria-labelledby="swLabel"><span class="thumb"><svg class="ic"><use href="#i-check"/></svg></span></button>
+  </div>
+</div>
+
+<main id="main">
+
+<section class="hero" id="home" style="padding-bottom: clamp(32px, 6vw, 72px)">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="bgroup" role="group" aria-label="Название вселенной" data-in style="--i:0">
+        <button class="btn" id="nmA" aria-pressed="true">Контимиус</button>
+        <button class="btn" id="nmB" aria-pressed="false">Мышка</button>
+      </div>
+      <h1 class="hero-title" id="heroTitle" data-in style="--i:1">Контимиус</h1>
+      <p class="lead" data-in style="--i:2">Контимиус, он же Мышка, это гигаструктура, на борту которой инкубируют Дмитриев Молотов. Элемент ДМ нужен гигаструктуре Ярослав, чтобы создавать вселенные. Здесь же растят биоматериал, ведут учёт и хранят всё самое ценное.</p>
+      <div class="cta" data-in style="--i:3">
+        <a class="btn" href="#structure"><svg class="ic"><use href="#i-layers"/></svg>Осмотреть борт</a>
+        <a class="btn tonal" href="#forge"><svg class="ic"><use href="#i-rocket"/></svg>Запустить Ярослав</a>
+      </div>
+    </div>
+    <div class="hero-art" data-in style="--i:2">
+      <svg viewBox="-200 -200 400 400" id="heroSvg" role="img" aria-label="Схема гигаструктуры: кольца, хранилища и молот в центре"></svg>
+      <div class="chips"><span class="tag">Гигаструктура</span><span class="tag">Борт Контимиуса</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="structure">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 class="display">Что на борту</h2>
+      <p class="lead">Четыре части Контимиуса работают как одна машина. Нажмите «Подробнее» на карточке, чтобы раскрыть её.</p>
+    </div>
+
+    <div class="bento">
+      <article class="card shape-a t-primary span7" data-card>
+        <div class="card-top">
+          <div class="mi"><svg viewBox="-100 -100 200 200"><path data-blob="flower" data-alt="cookie" fill="var(--primary)"/></svg><svg class="ic" style="color:var(--on-primary)"><use href="#i-building"/></svg></div>
+          <span class="tag">Отдел управления</span>
+        </div>
+        <h3 class="title">Отдел управления инкубацией Дмитриев Молотов</h3>
+        <p class="body">Штаб, где составляют графики, ведут учёт партий и следят, чтобы ни один инкубатор не простаивал. Работает отдел на милых пушистых фурри, горничных-фембоях в аккуратных фартуках.</p>
+        <div class="more"><div><p class="body">Смены идут по кругу, чай заваривают в начале каждой. Каждый сотрудник отвечает за свой участок: кто-то ведёт журнал, кто-то носит записки между отделами, кто-то обходит хранилища.</p></div></div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:auto">
+          <button class="btn sm tonal exp" aria-expanded="false">Подробнее<svg class="ic"><use href="#i-chevron"/></svg></button>
+          <a class="btn sm outlined" href="#staff" style="color:inherit">Познакомиться с персоналом</a>
+        </div>
+      </article>
+
+      <article class="card shape-b span5" data-card>
+        <div class="card-top">
+          <div class="mi"><svg viewBox="-100 -100 200 200"><path data-blob="cookie" data-alt="clover" fill="var(--tertiary-container)"/></svg><svg class="ic" style="color:var(--on-tertiary-container)"><use href="#i-egg"/></svg></div>
+          <span class="tag">Низшая каста</span>
+        </div>
+        <h3 class="title">Отдел инкубации Дмитриев Молотов</h3>
+        <p class="body">Здесь из биоматериала вылупляются новые Дмитрии Молоты, носители элемента ДМ.</p>
+        <div class="more"><div><p class="body">Они относятся к низшей касте Контимиуса, зато без них Ярославу нечего собирать. Работа тихая, тёплая и очень цикличная.</p></div></div>
+        <button class="btn sm tonal exp" aria-expanded="false">Подробнее<svg class="ic"><use href="#i-chevron"/></svg></button>
+      </article>
+
+      <article class="card shape-c t-secondary span5" data-card>
+        <div class="card-top">
+          <div class="mi"><svg viewBox="-100 -100 200 200"><path data-blob="sun" data-alt="squircle" fill="var(--secondary)"/></svg><svg class="ic" style="color:var(--on-primary)"><use href="#i-sprout"/></svg></div>
+          <span class="tag">Снабжение</span>
+        </div>
+        <h3 class="title">Отдел выращивания</h3>
+        <p class="body">Выращивает женский пол и поставляет биоматериал для инкубации Дмитриев Молотов.</p>
+        <div class="more"><div><p class="body">Поставки идут партиями по графику отдела управления. Если партия опаздывает, горничные приносят в отдел чай и список вопросов.</p></div></div>
+        <button class="btn sm outlined exp" style="color:inherit" aria-expanded="false">Подробнее<svg class="ic"><use href="#i-chevron"/></svg></button>
+      </article>
+
+      <article class="card shape-a span7" data-card>
+        <div class="card-top">
+          <div class="mi"><svg viewBox="-100 -100 200 200"><path data-blob="burst" data-alt="flower" fill="var(--primary-container)"/></svg><svg class="ic" style="color:var(--on-primary-container)"><use href="#i-vault"/></svg></div>
+          <span class="tag">Склад</span>
+        </div>
+        <h3 class="title">Хранилища</h3>
+        <p class="body">Множество герметичных хранилищ для трёх элементов. На каждом висит табличка с заполненностью и записка от горничных.</p>
+        <div class="vault-row"><a class="chip" href="#elements" style="text-decoration:none">№1 Перхоть</a><a class="chip" href="#elements" style="text-decoration:none">№3 Дмитрий Молот</a><a class="chip" href="#elements" style="text-decoration:none">№10 Ебалозавалиниум</a></div>
+        <div class="more"><div><p class="body">Записка у всех одна: «Не трясти и не открывать без смены». Проверка хранилищ идёт каждую вахту, а отчёты уходят в отдел управления.</p></div></div>
+        <button class="btn sm tonal exp" aria-expanded="false">Подробнее<svg class="ic"><use href="#i-chevron"/></svg></button>
+      </article>
+    </div>
+
+    <div class="stepper" aria-label="Как рождается вселенная">
+      <div class="step">
+        <div class="mi"><svg viewBox="-100 -100 200 200"><path data-blob="cookie" data-alt="flower" fill="var(--secondary-container)"/></svg><span class="num">1</span></div>
+        <h3 class="title">Вырастить</h3>
+        <p class="body small">Отдел выращивания готовит биоматериал и отправляет его на инкубацию.</p>
+      </div>
+      <div class="wv" data-wavy></div>
+      <div class="step">
+        <div class="mi"><svg viewBox="-100 -100 200 200"><path data-blob="flower" data-alt="sun" fill="var(--tertiary-container)"/></svg><span class="num">2</span></div>
+        <h3 class="title">Вылупить</h3>
+        <p class="body small">Отдел инкубации выпускает Дмитриев Молотов, а отдел управления ведёт учёт.</p>
+      </div>
+      <div class="wv" data-wavy></div>
+      <div class="step">
+        <div class="mi"><svg viewBox="-100 -100 200 200"><path data-blob="sun" data-alt="burst" fill="var(--primary-container)"/></svg><span class="num">3</span></div>
+        <h3 class="title">Собрать</h3>
+        <p class="body small">Элемент ДМ уходит в гигаструктуру Ярослав, и появляется новая вселенная.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="elements" style="background: var(--surface-low)">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 class="display">Три элемента</h2>
+      <p class="lead">В хранилищах Контимиуса лежат элементы под номерами 1, 3 и 10. Двигайте ползунок, чтобы изменить заполненность хранилища.</p>
+    </div>
+    <div class="el-grid" id="elGrid"></div>
+  </div>
+</section>
+
+<section id="staff">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 class="display">Пушистая смена</h2>
+      <p class="lead">Отдел управления держится на милых фурри, горничных-фембоях. Они ведут журналы, носят записки и заваривают чай. Соберите смену из трёх сотрудников.</p>
+    </div>
+    <div class="toolbar">
+      <div class="chips" id="filters" role="group" aria-label="Фильтр по виду"></div>
+      <div class="shift" aria-live="polite"><svg class="ic"><use href="#i-users"/></svg>В смене: <b id="shiftCount">0</b> из 3</div>
+    </div>
+    <div class="maid-grid" id="maidGrid"></div>
+  </div>
+</section>
+
+<section id="forge" style="background: var(--surface-low)">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 class="display">Запуск Ярослава</h2>
+      <p class="lead">Отдел управления запускает цепочку: выращивание, инкубация, сборка. На выходе новая вселенная и отчёт о смеси элементов.</p>
+    </div>
+    <div class="forge" id="forgeBox">
+      <div class="card shape-c t-primary forge-ctl">
+        <div style="display:grid;gap:14px">
+          <h3 class="title">Пульт гигаструктуры</h3>
+          <p class="body">Нажмите кнопку, и Контимиус отправит партию Молотов в Ярослав.</p>
+        </div>
+        <div style="display:grid;gap:18px">
+          <div style="display:flex;align-items:center;gap:16px">
+            <div class="loader" aria-hidden="true"><svg viewBox="-100 -100 200 200"><path id="loadBlob" fill="var(--primary)"/></svg></div>
+            <p class="status" id="status" role="status">Готов к запуску</p>
+          </div>
+          <div class="wv" id="runWave" style="margin-top:0" data-wavy-run></div>
+          <button class="btn" id="runBtn"><svg class="ic"><use href="#i-rocket"/></svg>Запустить Ярослав</button>
+        </div>
+      </div>
+      <div class="card shape-b out" id="out">
+        <div class="out-empty">
+          <h3 class="title">Пока ничего не создано</h3>
+          <p class="body">Здесь появится отчёт о новой вселенной: название, смесь элементов и подпись дежурного.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="card shape-c">
+      <h3 class="title">О проекте</h3>
+      <p class="body">Контимиус (Мышка) — вымышленная вселенная, придуманная для развлечения. Все названия, отделы и элементы здесь в шутку и в мирном ключе, без оскорблений.</p>
+    </div>
+  </div>
+</footer>
+
+</main>
+</div>
+
+<div class="fabwrap" id="fabwrap">
+  <div class="fab-items">
+    <button class="fab-item" style="--i:2" data-act="run"><svg class="ic"><use href="#i-rocket"/></svg>Запустить Ярослав</button>
+    <button class="fab-item" style="--i:1" data-act="theme"><svg class="ic"><use href="#i-shuffle"/></svg>Случайный цвет</button>
+    <button class="fab-item" style="--i:0" data-act="top"><svg class="ic"><use href="#i-up"/></svg>Наверх</button>
+  </div>
+  <button class="fab" id="fab" aria-label="Быстрые действия" aria-expanded="false"><svg class="ic"><use href="#i-plus"/></svg></button>
+</div>
+<div class="snackbar" id="snack" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const root = document.documentElement;
+  const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+  const calm = () => root.classList.contains('calm');
+  const NS = 'http://www.w3.org/2000/svg';
+
+  /* ---------- snackbar ---------- */
+  let snT;
+  function snack(msg) {
+    const s = $('#snack'); s.textContent = msg; s.classList.add('show');
+    clearTimeout(snT); snT = setTimeout(() => s.classList.remove('show'), 3000);
+  }
+
+  /* ---------- theme ---------- */
+  const SEEDS = [
+    { n: 'Орхидея', h: 300 }, { n: 'Бирюза', h: 195 }, { n: 'Коралл', h: 25 },
+    { n: 'Лайм', h: 125 }, { n: 'Роза', h: 350 }, { n: 'Небо', h: 245 }
+  ];
+  let hue = parseInt(store.get('kx-hue') || '300', 10);
+  const hueRange = $('#hueRange');
+  function paintSwatches() {
+    $$('.sw').forEach(b => {
+      const d = Math.abs(((+b.dataset.h - hue + 540) % 360) - 180);
+      b.setAttribute('aria-pressed', d < 9 ? 'true' : 'false');
+    });
+  }
+  function setHue(h, persist = true) {
+    hue = ((Math.round(h) % 360) + 360) % 360;
+    root.style.setProperty('--h', hue);
+    hueRange.value = hue;
+    paintSwatches();
+    if (persist) store.set('kx-hue', hue);
+  }
+  $('#swatches').innerHTML = SEEDS.map(s =>
+    `<button class="sw" data-h="${s.h}" aria-label="${s.n}" aria-pressed="false" style="background:oklch(.55 .2 ${s.h})"><svg class="ic"><use href="#i-check"/></svg></button>`).join('');
+  $('#swatches').addEventListener('click', e => { const b = e.target.closest('.sw'); if (b) { setHue(+b.dataset.h); heroBlobMorph(); } });
+  hueRange.addEventListener('input', () => { root.classList.add('nt'); setHue(+hueRange.value); });
+  hueRange.addEventListener('change', () => root.classList.remove('nt'));
+  setHue(hue, false);
+
+  const mq = matchMedia('(prefers-color-scheme: dark)');
+  let mode = store.get('kx-mode') || (mq.matches ? 'dark' : 'light');
+  function applyMode(m) {
+    mode = m; root.dataset.theme = m;
+    const b = $('#btnMode'); b.setAttribute('aria-pressed', m === 'dark');
+    b.setAttribute('aria-label', m === 'dark' ? 'Светлая тема' : 'Тёмная тема');
+    store.set('kx-mode', m);
+  }
+  applyMode(mode);
+  $('#btnMode').addEventListener('click', () => applyMode(mode === 'dark' ? 'light' : 'dark'));
+
+  /* menu */
+  const menu = $('#menu'), bp = $('#btnPalette');
+  function toggleMenu(o) { menu.classList.toggle('open', o); bp.setAttribute('aria-expanded', o); }
+  bp.addEventListener('click', e => { e.stopPropagation(); toggleMenu(!menu.classList.contains('open')); });
+  document.addEventListener('click', e => { if (!menu.contains(e.target) && !bp.contains(e.target)) toggleMenu(false); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') { toggleMenu(false); toggleFab(false); } });
+  const sw = $('#swMotion');
+  sw.addEventListener('click', () => {
+    const on = sw.getAttribute('aria-checked') !== 'true';
+    sw.setAttribute('aria-checked', on);
+    root.classList.toggle('calm', !on);
+    snack(on ? 'Пружинные анимации включены' : 'Анимации приглушены');
+  });
+
+  /* ---------- ripples ---------- */
+  document.addEventListener('pointerdown', e => {
+    const t = e.target.closest('.btn,.ib,.chip,.fab,.fab-item');
+    if (!t || calm()) return;
+    const r = t.getBoundingClientRect(), size = Math.max(r.width, r.height) * 2.2;
+    const s = document.createElement('span'); s.className = 'ripple';
+    s.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX - r.left - size / 2}px;top:${e.clientY - r.top - size / 2}px`;
+    t.appendChild(s); setTimeout(() => s.remove(), 750);
+  });
+
+  /* ---------- morphing shapes ---------- */
+  const N = 160;
+  const FN = {
+    cookie: t => 1 + .06 * Math.cos(9 * t),
+    flower: t => 1 + .17 * Math.cos(5 * t),
+    sun: t => 1 + .08 * Math.cos(12 * t),
+    clover: t => 1 + .2 * Math.cos(4 * t),
+    burst: t => 1 + .13 * Math.cos(7 * t),
+    squircle: t => Math.pow(Math.pow(Math.abs(Math.cos(t)), 4) + Math.pow(Math.abs(Math.sin(t)), 4), -.25)
+  };
+  const R = {};
+  Object.keys(FN).forEach(k => {
+    const a = new Float32Array(N); let mx = 0;
+    for (let i = 0; i < N; i++) { a[i] = FN[k](i / N * Math.PI * 2); mx = Math.max(mx, a[i]); }
+    for (let i = 0; i < N; i++) a[i] /= mx;
+    R[k] = a;
+  });
+  const SHAPES = Object.keys(R);
+  const easeBack = p => { const c = 1.5; return 1 + (c + 1) * Math.pow(p - 1, 3) + c * Math.pow(p - 1, 2); };
+  class Blob {
+    constructor(path, shape, radius = 90) {
+      this.p = path; this.r = radius; this.cur = Float32Array.from(R[shape]); this.raf = 0; this.draw();
+    }
+    draw() {
+      let d = '';
+      for (let i = 0; i < N; i++) {
+        const t = i / N * Math.PI * 2, rr = this.cur[i] * this.r;
+        d += (i ? 'L' : 'M') + (Math.cos(t) * rr).toFixed(1) + ' ' + (Math.sin(t) * rr).toFixed(1);
+      }
+      this.p.setAttribute('d', d + 'Z');
+    }
+    to(shape, dur = 800) {
+      if (calm()) { this.cur = Float32Array.from(R[shape]); this.draw(); return; }
+      cancelAnimationFrame(this.raf);
+      const from = Float32Array.from(this.cur), to = R[shape], t0 = performance.now();
+      const step = now => {
+        const p = Math.min(1, (now - t0) / dur), e = easeBack(p);
+        for (let i = 0; i < N; i++) this.cur[i] = from[i] + (to[i] - from[i]) * e;
+        this.draw();
+        if (p < 1) this.raf = requestAnimationFrame(step);
+      };
+      this.raf = requestAnimationFrame(step);
+    }
+  }
+  function initBlobs(scope = document) {
+    $$('[data-blob]', scope).forEach(p => {
+      if (p._b) return;
+      const b = p._b = new Blob(p, p.dataset.blob);
+      const host = p.closest('.card, .step') || p.parentNode;
+      const base = p.dataset.blob, alt = p.dataset.alt || SHAPES[(SHAPES.indexOf(base) + 2) % SHAPES.length];
+      host.addEventListener('pointerenter', () => b.to(alt, 900));
+      host.addEventListener('pointerleave', () => b.to(base, 900));
+    });
+  }
+
+  /* ---------- wavy progress ---------- */
+  let wid = 0;
+  const WAVE = 'M-80 10q10 -10 20 0' + ' t20 0'.repeat(36);
+  function wavy(host, value = 0, tone) {
+    const id = 'wc' + (++wid);
+    host.classList.add('wvh'); if (tone) host.classList.add(tone);
+    host.innerHTML = `<svg viewBox="0 0 600 20" preserveAspectRatio="none" aria-hidden="true"><defs><clipPath id="${id}"><rect x="0" y="0" width="0" height="20"/></clipPath></defs><line class="wtrack" x1="2" y1="10" x2="598" y2="10"/><g clip-path="url(#${id})"><path class="wwave" d="${WAVE}"/></g></svg>`;
+    const rect = $('rect', host);
+    const api = { set(v) { rect.setAttribute('width', Math.max(0, Math.min(1, v)) * 600); } };
+    api.set(value); return api;
+  }
+  $$('[data-wavy]').forEach(h => wavy(h, 1, h.previousElementSibling && h.previousElementSibling.querySelector('.mi') ? 'wave-t' : ''));
+  const runWave = wavy($('#runWave'), 0);
+
+  /* ---------- hero art ---------- */
+  (function hero() {
+    const svg = $('#heroSvg');
+    let h = `<path id="heroBlob" fill="var(--primary-container)"/>`;
+    h += `<g class="spin"><circle r="158" fill="none" stroke="var(--primary)" stroke-width="5" stroke-linecap="round" stroke-dasharray="1 15" opacity=".7"/></g>`;
+    h += `<g class="spin rev"><circle r="122" fill="none" stroke="var(--tertiary)" stroke-width="12" stroke-linecap="round" stroke-dasharray="70 24" opacity=".9"/>`;
+    for (let i = 0; i < 6; i++) { const a = i / 6 * Math.PI * 2; h += `<rect x="${(Math.cos(a) * 122 - 11).toFixed(1)}" y="${(Math.sin(a) * 122 - 11).toFixed(1)}" width="22" height="22" rx="7" fill="var(--surface)" stroke="var(--tertiary)" stroke-width="4" transform="rotate(${(a * 180 / Math.PI).toFixed(1)} ${(Math.cos(a) * 122).toFixed(1)} ${(Math.sin(a) * 122).toFixed(1)})"/>`; }
+    h += `</g><g class="spin fast"><circle r="86" fill="none" stroke="var(--secondary)" stroke-width="4" stroke-dasharray="26 12" stroke-linecap="round"/>`;
+    for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2; h += `<line x1="${(Math.cos(a) * 44).toFixed(1)}" y1="${(Math.sin(a) * 44).toFixed(1)}" x2="${(Math.cos(a) * 84).toFixed(1)}" y2="${(Math.sin(a) * 84).toFixed(1)}" stroke="var(--on-primary-container)" stroke-width="3" stroke-linecap="round" opacity=".35"/>`; }
+    h += `</g><circle r="46" fill="var(--primary)"/><svg x="-28" y="-28" width="56" height="56" viewBox="0 0 24 24" style="color:var(--on-primary);overflow:visible"><use href="#i-hammer" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    svg.innerHTML = h;
+  })();
+  const heroBlob = new Blob($('#heroBlob'), 'cookie', 186);
+  let hi = 0;
+  function heroBlobMorph() { hi = (hi + 1) % SHAPES.length; heroBlob.to(SHAPES[hi], 1000); }
+  $('.hero-art').addEventListener('click', heroBlobMorph);
+  $('.hero-art').addEventListener('pointerenter', heroBlobMorph);
+
+  /* hero title: variable font follows pointer; name toggle */
+  const title = $('#heroTitle'), nmA = $('#nmA'), nmB = $('#nmB');
+  function setName(alt) {
+    nmA.setAttribute('aria-pressed', !alt); nmB.setAttribute('aria-pressed', alt);
+    title.classList.toggle('alt', alt); title.textContent = alt ? 'Мышка' : 'Контимиус';
+    title.style.removeProperty('--wd'); title.style.removeProperty('--wg');
+    document.title = (alt ? 'Мышка' : 'Контимиус') + ' — вики гигаструктуры';
+    $('.appbar-title').textContent = alt ? 'Мышка' : 'Контимиус';
+  }
+  nmA.addEventListener('click', () => setName(false));
+  nmB.addEventListener('click', () => setName(true));
+  $('#home').addEventListener('pointermove', e => {
+    if (e.pointerType === 'touch') return;
+    const x = e.clientX / innerWidth, y = e.clientY / innerHeight;
+    title.style.setProperty('--wd', (70 + x * 81).toFixed(0));
+    title.style.setProperty('--wg', (520 + (1 - y) * 480).toFixed(0));
+  });
+
+  /* app bar + nav spy */
+  const bar = $('#appbar');
+  addEventListener('scroll', () => bar.classList.toggle('scrolled', scrollY > 260), { passive: true });
+  const links = $$('.nav-item');
+  const io = new IntersectionObserver(es => {
+    es.forEach(en => { if (en.isIntersecting) links.forEach(l => l.setAttribute('aria-current', l.dataset.sec === en.target.id ? 'true' : 'false')); });
+  }, { rootMargin: '-45% 0px -50% 0px' });
+  ['home', 'structure', 'elements', 'staff', 'forge'].forEach(id => io.observe($('#' + id)));
+  links[0].setAttribute('aria-current', 'true');
+
+  /* expandable cards */
+  $$('[data-card]').forEach(c => {
+    const b = $('.exp', c);
+    b.addEventListener('click', () => { const o = c.classList.toggle('open'); b.setAttribute('aria-expanded', o); b.firstChild.textContent = o ? 'Свернуть' : 'Подробнее'; });
+  });
+
+  /* ---------- elements ---------- */
+  const ELS = [
+    { no: 1, sym: 'Пх', name: 'Перхоть', shape: 'cookie', alt: 'sun', tone: 't-secondary', fill: 'var(--secondary)', nrav: 'Лёгкая и летучая', keep: 'Плотные хранилища без сквозняков', val: 62, desc: 'Первый элемент Контимиуса. Белёсый, лёгкий, любит оседать на всём подряд, поэтому горничные регулярно протирают полки.' },
+    { no: 3, sym: 'ДМ', name: 'Дмитрий Молот', shape: 'burst', alt: 'flower', tone: 't-primary', fill: 'var(--primary)', nrav: 'Упрямый и надёжный', keep: 'Рядом с гигаструктурой Ярослав', val: 85, desc: 'Главный элемент для создания вселенных. Вместе с Ярославом превращается в новые миры.' },
+    { no: 10, sym: 'Ез', name: 'Ебалозавалиниум', shape: 'clover', alt: 'squircle', tone: 't-tertiary', fill: 'var(--tertiary)', nrav: 'Тяжёлый и своенравный', keep: 'Отдельные хранилища с усиленными стенами', val: 34, desc: 'Самый тяжёлый элемент из списка. Капризный, поэтому его хранилища проверяют дважды за смену.' }
+  ];
+  const shapesCls = ['shape-a', 'shape-c', 'shape-b'];
+  $('#elGrid').innerHTML = ELS.map((e, i) => `
+    <article class="card el-card ${e.tone} ${shapesCls[i]}">
+      <div class="el-id">
+        <div class="mi"><svg viewBox="-100 -100 200 200"><path data-blob="${e.shape}" data-alt="${e.alt}" fill="${e.fill}"/></svg><span class="sym" style="color:var(--surface)">${e.sym}</span></div>
+        <div><div class="el-no">Элемент №${e.no}</div><h3 class="title">${e.name}</h3></div>
+      </div>
+      <p class="body">${e.desc}</p>
+      <dl class="props"><div><dt>Нрав</dt><dd>${e.nrav}</dd></div><div><dt>Хранение</dt><dd>${e.keep}</dd></div></dl>
+      <div class="gauge"><span>Заполнено хранилищ</span><b id="pc${i}">${e.val}%</b></div>
+      <div class="wv" id="wv${i}" style="margin:0"></div>
+      <div class="slider"><input type="range" min="0" max="100" value="${e.val}" aria-label="Заполненность хранилищ: ${e.name}" id="rg${i}"></div>
+    </article>`).join('');
+  ELS.forEach((e, i) => {
+    const w = wavy($('#wv' + i), e.val / 100, i === 2 ? 'wave-t' : '');
+    const r = $('#rg' + i), pc = $('#pc' + i);
+    const upd = () => { const v = +r.value; r.style.setProperty('--val', v + '%'); pc.textContent = v + '%'; w.set(v / 100); };
+    r.addEventListener('input', upd); upd();
+  });
+
+  /* ---------- staff ---------- */
+  const SP = { cat: 'Коты', fox: 'Лисы', bunny: 'Кролики', wolf: 'Волки' };
+  const MAIDS = [
+    { n: 'Мурзик', s: 'cat', t: 'Кот', fur: '#f2a65a', dark: '#d9853a', inner: '#ffc9c9', eye: '#2d7a5f', role: 'Старший по смене', fact: 'Ведёт журнал партий и заваривает чай на всю вахту.' },
+    { n: 'Бублик', s: 'bunny', t: 'Кролик', fur: '#f3efe9', dark: '#d8d0c6', inner: '#ffc6d6', eye: '#7a3d8c', role: 'Учёт хранилищ', fact: 'Каждое утро пересчитывает полки и ещё ни разу не ошибся.' },
+    { n: 'Рыжик', s: 'fox', t: 'Лис', fur: '#e8742c', dark: '#b9511a', inner: '#ffe0c2', eye: '#c98a00', role: 'Связь с отделами', fact: 'Носит записки между отделами быстрее, чем их успевают написать.' },
+    { n: 'Туман', s: 'wolf', t: 'Волк', fur: '#8a93a3', dark: '#5c6575', inner: '#d6dbe6', eye: '#3a6fb0', role: 'Ночная вахта', fact: 'Тихо обходит коридоры и гасит лишний свет.' },
+    { n: 'Мочи', s: 'bunny', t: 'Кролик', fur: '#e9d3c0', dark: '#c9a98e', inner: '#ffd1dc', eye: '#3d3d8a', role: 'Порядок и уборка', fact: 'Раскладывает фартуки по размеру и по настроению.' },
+    { n: 'Соль', s: 'cat', t: 'Кот', fur: '#d9d9e0', dark: '#9a9aa8', inner: '#ffd3df', eye: '#1f8aa8', role: 'Приём новичков', fact: 'Показывает новеньким, где что лежит, и всегда держит запасной фартук.' }
+  ];
+  function maidSVG(m) {
+    const { fur: f, dark: d, inner: i, eye: e } = m;
+    let ears = '';
+    if (m.s === 'cat') ears = `<path d="M38 88L48 20L96 56Z" fill="${f}"/><path d="M162 88L152 20L104 56Z" fill="${f}"/><path d="M52 76L56 38L82 58Z" fill="${i}"/><path d="M148 76L144 38L118 58Z" fill="${i}"/>`;
+    if (m.s === 'fox') ears = `<path d="M34 92L40 8L98 54Z" fill="${f}"/><path d="M166 92L160 8L102 54Z" fill="${f}"/><path d="M40 8L55 40L33 48Z" fill="${d}"/><path d="M160 8L145 40L167 48Z" fill="${d}"/><path d="M50 80L52 36L84 58Z" fill="${i}"/><path d="M150 80L148 36L116 58Z" fill="${i}"/>`;
+    if (m.s === 'wolf') ears = `<path d="M36 92L40 22Q70 28 96 58Z" fill="${d}"/><path d="M164 92L160 22Q130 28 104 58Z" fill="${d}"/><path d="M50 78L52 40L80 58Z" fill="${i}"/><path d="M150 78L148 40L120 58Z" fill="${i}"/>`;
+    if (m.s === 'bunny') ears = `<ellipse cx="68" cy="40" rx="17" ry="46" fill="${f}" transform="rotate(-10 68 40)"/><ellipse cx="132" cy="40" rx="17" ry="46" fill="${f}" transform="rotate(10 132 40)"/><ellipse cx="68" cy="42" rx="8" ry="33" fill="${i}" transform="rotate(-10 68 42)"/><ellipse cx="132" cy="42" rx="8" ry="33" fill="${i}" transform="rotate(10 132 42)"/>`;
+    const fluff = m.s === 'bunny' ? '' : `<path d="M36 118L16 138L46 144Z" fill="${f}"/><path d="M164 118L184 138L154 144Z" fill="${f}"/>`;
+    return `<svg viewBox="0 0 200 220" aria-hidden="true">
+      ${ears}
+      <path d="M24 224Q34 170 100 170Q166 170 176 224Z" fill="#2c2a3a"/>
+      <path d="M80 224L86 176Q100 184 114 176L120 224Z" fill="#fff"/>
+      ${fluff}
+      <ellipse cx="100" cy="112" rx="68" ry="60" fill="${f}"/>
+      <ellipse cx="100" cy="134" rx="30" ry="21" fill="#fff6ec"/>
+      <ellipse cx="72" cy="112" rx="9" ry="12" fill="${e}"/><ellipse cx="128" cy="112" rx="9" ry="12" fill="${e}"/>
+      <ellipse cx="72" cy="113" rx="4.5" ry="7" fill="#1b1b24"/><ellipse cx="128" cy="113" rx="4.5" ry="7" fill="#1b1b24"/>
+      <circle cx="75" cy="107" r="3.4" fill="#fff"/><circle cx="131" cy="107" r="3.4" fill="#fff"/>
+      <ellipse cx="54" cy="134" rx="9" ry="5" fill="#ff8fa8" opacity=".55"/><ellipse cx="146" cy="134" rx="9" ry="5" fill="#ff8fa8" opacity=".55"/>
+      <path d="M94 127Q100 122 106 127Q100 134 94 127Z" fill="#3a2a30"/>
+      <path d="M100 132Q100 140 92 140M100 132Q100 140 108 140" stroke="#3a2a30" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+      <path d="M40 88Q100 38 160 88L152 98Q100 56 48 98Z" fill="#fff" stroke="#d9d9e2" stroke-width="2"/>
+      <g transform="translate(62 72) rotate(-12)"><path d="M0 0L-17 -10L-17 10Z" fill="var(--primary)"/><path d="M0 0L17 -10L17 10Z" fill="var(--primary)"/><circle r="5.5" fill="var(--primary)" stroke="var(--on-primary)" stroke-width="2"/></g>
+      <g transform="translate(100 180)"><path d="M0 0L-18 -10L-18 10Z" fill="var(--primary)"/><path d="M0 0L18 -10L18 10Z" fill="var(--primary)"/><circle r="6" fill="var(--primary)" stroke="var(--on-primary)" stroke-width="2"/></g>
+    </svg>`;
+  }
+  const maidGrid = $('#maidGrid');
+  maidGrid.innerHTML = MAIDS.map((m, i) => `
+    <article class="card maid ${i % 2 ? 'shape-b' : 'shape-a'}" data-sp="${m.s}" data-i="${i}">
+      <div class="av">
+        <svg viewBox="-100 -100 200 200" aria-hidden="true"><path data-blob="${SHAPES[(i + 1) % SHAPES.length]}" data-alt="${SHAPES[(i + 3) % SHAPES.length]}" fill="${i % 3 === 0 ? 'var(--primary-container)' : i % 3 === 1 ? 'var(--tertiary-container)' : 'var(--secondary-container)'}"/></svg>
+        <div style="position:absolute;inset:14% 14% 0 14%">${maidSVG(m)}</div>
+      </div>
+      <div class="card-top">
+        <div><h3 class="title">${m.n}</h3><span class="body small">${m.t}, горничный-фембой</span></div>
+        <button class="ib" aria-pressed="false" aria-label="Добавить в смену: ${m.n}"><svg class="ic"><use href="#i-heart"/></svg></button>
+      </div>
+      <div><span class="tag">${m.role}</span></div>
+      <p class="body small">${m.fact}</p>
+    </article>`).join('');
+  initBlobs();
+
+  const shift = new Set();
+  maidGrid.addEventListener('click', e => {
+    const b = e.target.closest('.ib'); if (!b) return;
+    const card = b.closest('.maid'), i = +card.dataset.i, m = MAIDS[i];
+    if (shift.has(i)) { shift.delete(i); snack(`${m.n} вернулся на отдых`); }
+    else if (shift.size >= 3) { snack('В смене не больше трёх сотрудников'); return; }
+    else { shift.add(i); snack(`${m.n} добавлен в смену`); }
+    const on = shift.has(i);
+    b.setAttribute('aria-pressed', on); card.classList.toggle('on', on);
+    $('#shiftCount').textContent = shift.size;
+  });
+  const fl = $('#filters');
+  fl.innerHTML = ['all', ...Object.keys(SP)].map(k => `<button class="chip" data-k="${k}" aria-pressed="${k === 'all'}"><svg class="ic"><use href="#i-check"/></svg>${k === 'all' ? 'Все' : SP[k]}</button>`).join('');
+  fl.addEventListener('click', e => {
+    const c = e.target.closest('.chip'); if (!c) return;
+    $$('.chip', fl).forEach(x => x.setAttribute('aria-pressed', x === c));
+    $$('.maid', maidGrid).forEach(m => { m.hidden = c.dataset.k !== 'all' && m.dataset.sp !== c.dataset.k; });
+  });
+
+  /* ---------- forge ---------- */
+  const loadBlob = new Blob($('#loadBlob'), 'cookie', 88);
+  let lbT, lbI = 0;
+  const syl = ['Кра', 'Мур', 'Зу', 'Бон', 'Лим', 'Тар', 'Вел', 'Ока', 'Пух', 'Нис', 'Рэй', 'До', 'Фе', 'Мя', 'Ку'];
+  const suf = ['-7', ' Прайм', ' Малая', ' Мягкая', '-12', ''];
+  const kinds = ['Тёплая', 'Пушистая', 'Тяжёлая', 'Туманная', 'Звонкая', 'Уютная'];
+  const pick = a => a[Math.floor(Math.random() * a.length)];
+  function makeUni() {
+    let nm = pick(syl) + pick(syl).toLowerCase() + (Math.random() < .5 ? pick(syl).toLowerCase() : '');
+    nm += pick(suf);
+    const w = [Math.random() + .2, Math.random() + .2, Math.random() + .2], s = w[0] + w[1] + w[2];
+    let p = w.map(x => Math.round(x / s * 100)); p[2] = 100 - p[0] - p[1];
+    const m = pick(MAIDS);
+    return { name: nm, kind: pick(kinds), mix: p, stab: 60 + Math.floor(Math.random() * 40), by: m.n, role: m.role };
+  }
+  const out = $('#out');
+  function show(u) {
+    out.innerHTML = `
+      <div><span class="tag">${u.kind} вселенная</span></div>
+      <h3 class="uni-name">${u.name}</h3>
+      <div class="mix">
+        ${[['Перхоть', 0], ['Дмитрий Молот', 1], ['Ебалозавалиниум', 2]].map(([n, i]) => `<div class="mix-row"><div class="lab"><span>${n}</span><span>${u.mix[i]}%</span></div><div class="wv" data-m="${i}" style="margin:0"></div></div>`).join('')}
+      </div>
+      <div class="chips"><span class="chip" aria-pressed="true"><svg class="ic"><use href="#i-check"/></svg>Устойчивость ${u.stab}%</span><span class="chip" aria-pressed="true"><svg class="ic"><use href="#i-check"/></svg>Отчёт: ${u.by}, ${u.role.toLowerCase()}</span></div>
+      <div class="hist" id="hist" aria-label="Предыдущие запуски"></div>`;
+    $$('[data-m]', out).forEach(h => wavy(h, u.mix[+h.dataset.m] / 100, +h.dataset.m === 2 ? 'wave-t' : ''));
+    renderHist();
+  }
+  const hist = [];
+  function renderHist() {
+    const h = $('#hist'); if (!h) return;
+    h.innerHTML = hist.length > 1 ? hist.slice(0, 6).map((u, i) => `<button class="chip" data-h="${i}">${u.name}</button>`).join('') : '';
+  }
+  out.addEventListener('click', e => { const c = e.target.closest('[data-h]'); if (c) show(hist[+c.dataset.h]); });
+  const phases = ['Отдел выращивания готовит биоматериал', 'Отдел инкубации выпускает Молота', 'Ярослав собирает вселенную'];
+  let busy = false;
+  function run() {
+    if (busy) return; busy = true;
+    const btn = $('#runBtn'), box = $('#forgeBox'), st = $('#status');
+    btn.disabled = true; box.classList.add('running');
+    lbT = setInterval(() => { lbI = (lbI + 1) % SHAPES.length; loadBlob.to(SHAPES[lbI], 500); }, 520);
+    const dur = calm() ? 900 : 2800, t0 = performance.now();
+    const step = now => {
+      const p = Math.min(1, (now - t0) / dur);
+      runWave.set(p); st.textContent = phases[Math.min(2, Math.floor(p * 3))];
+      if (p < 1) requestAnimationFrame(step); else done();
+    };
+    requestAnimationFrame(step);
+    function done() {
+      clearInterval(lbT); box.classList.remove('running');
+      const u = makeUni(); hist.unshift(u); show(u);
+      st.textContent = 'Вселенная создана'; btn.disabled = false; busy = false;
+      runWave.set(0); snack(`Создана вселенная ${u.name}`);
+    }
+  }
+  $('#runBtn').addEventListener('click', run);
+
+  /* ---------- FAB ---------- */
+  const fabw = $('#fabwrap'), fab = $('#fab');
+  function toggleFab(o) { fabw.classList.toggle('open', o); fab.setAttribute('aria-expanded', o); }
+  fab.addEventListener('click', e => { e.stopPropagation(); toggleFab(!fabw.classList.contains('open')); });
+  document.addEventListener('click', e => { if (!fabw.contains(e.target)) toggleFab(false); });
+  fabw.addEventListener('click', e => {
+    const b = e.target.closest('[data-act]'); if (!b) return;
+    const a = b.dataset.act; toggleFab(false);
+    if (a === 'top') scrollTo({ top: 0, behavior: calm() ? 'auto' : 'smooth' });
+    if (a === 'theme') { setHue(Math.random() * 360); heroBlobMorph(); snack('Палитра обновлена'); }
+    if (a === 'run') { $('#forge').scrollIntoView({ behavior: calm() ? 'auto' : 'smooth' }); setTimeout(run, 500); }
+  });
+
+  initBlobs();
+})();
+</script>
+</body>
+</html>
